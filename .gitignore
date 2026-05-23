@@ -1,0 +1,25 @@
+# Simulation outputs
+*.out
+*.vcd
+
+# GTKWave save files
+*.gtkw
+
+# Build directories
+sim/
+
+# Verilator outputs
+obj_dir/
+
+# Logs
+*.log
+
+# Temporary editor files
+*~
+*.swp
+
+# VS Code settings
+.vscode/
+
+# Python cache
+__pycache__/
