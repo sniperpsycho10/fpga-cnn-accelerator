@@ -1,16 +1,20 @@
 SIM = iverilog
 
-SRC = rtl/convolution_engine.v
-TB  = tb/convolution_engine_tb.v
+SRC = rtl/sliding_window.v \
+       rtl/convolution_engine.v \
+       rtl/relu.v \
+       rtl/cnn_pipeline.v
 
-OUT = sim/convolution_engine.out
+TB = tb/cnn_pipeline_tb.v
+
+OUT = sim/cnn_pipeline.out
 
 all:
 	$(SIM) -o $(OUT) $(SRC) $(TB)
 	vvp $(OUT)
 
 wave:
-	gtkwave waveforms/convolution_engine.vcd
+	gtkwave waveforms/cnn_pipeline.vcd
 
 clean:
 	rm -f sim/*.out
