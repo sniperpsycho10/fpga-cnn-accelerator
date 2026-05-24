@@ -1,16 +1,20 @@
 `timescale 1ns/1ps
 
-module max_pool_tb;
+module scalable_max_pool_tb;
+
+parameter DATA_WIDTH = 32;
 
 reg clk;
 reg rst;
-reg signed [31:0] a;
-reg signed [31:0] b;
-reg signed [31:0] c;
-reg signed [31:0] d;
-wire signed [31:0] max_out;
+reg signed [DATA_WIDTH-1:0] a;
+reg signed [DATA_WIDTH-1:0] b;
+reg signed [DATA_WIDTH-1:0] c;
+reg signed [DATA_WIDTH-1:0] d;
+wire signed [DATA_WIDTH-1:0] max_out;
 
-max_pool uut(
+scalable_max_pool #(
+    .DATA_WIDTH(DATA_WIDTH)
+) uut (
     .clk(clk),
     .rst(rst),
     .a(a),
@@ -22,8 +26,9 @@ max_pool uut(
 
 always #5 clk = ~clk;
 initial begin
-    $dumpfile("waveforms/max_pool.vcd");
-    $dumpvars(0, max_pool_tb);
+    $dumpfile("waveforms/scalable_max_pool.vcd");
+    $dumpvars(0, scalable_max_pool_tb);
+
     clk = 0;
     rst = 1;
 
@@ -44,7 +49,7 @@ initial begin
     #10;
     a = -5;
     b = -2;
-    c = -20;
+    c = -10;
     d = -1;
 
     #10;

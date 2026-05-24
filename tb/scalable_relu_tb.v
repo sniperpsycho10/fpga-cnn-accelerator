@@ -1,13 +1,17 @@
 `timescale 1ns/1ps
 
-module relu_tb;
+module scalable_relu_tb;
+
+parameter DATA_WIDTH = 32;
 
 reg clk;
 reg rst;
-reg signed [31:0] data_in;
-wire signed [31:0] data_out;
+reg signed [DATA_WIDTH-1:0] data_in;
+wire signed [DATA_WIDTH-1:0] data_out;
 
-relu uut(
+scalable_relu #(
+    .DATA_WIDTH(DATA_WIDTH)
+) uut (
     .clk(clk),
     .rst(rst),
     .data_in(data_in),
@@ -16,8 +20,9 @@ relu uut(
 
 always #5 clk = ~clk;
 initial begin
-    $dumpfile("waveforms/relu.vcd");
-    $dumpvars(0, relu_tb);
+    $dumpfile("waveforms/scalable_relu.vcd");
+    $dumpvars(0, scalable_relu_tb);
+
     clk = 0;
     rst = 1;
 
@@ -33,7 +38,7 @@ initial begin
     data_in = -10;
 
     #10;
-    data_in = 50;
+    data_in = 100;
 
     #30;
     $finish;

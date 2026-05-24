@@ -1,15 +1,18 @@
-module max_pool(
+module scalable_max_pool #(
+    parameter DATA_WIDTH = 32
+)(
     input clk,
     input rst,
-    input signed [31:0] a,
-    input signed [31:0] b,
-    input signed [31:0] c,
-    input signed [31:0] d,
-    output reg signed [31:0] max_out
+    input signed [DATA_WIDTH-1:0] a,
+    input signed [DATA_WIDTH-1:0] b,
+    input signed [DATA_WIDTH-1:0] c,
+    input signed [DATA_WIDTH-1:0] d,
+    output reg signed [DATA_WIDTH-1:0] max_out
 );
 
-reg signed [31:0] max1;
-reg signed [31:0] max2;
+reg signed [DATA_WIDTH-1:0] max1;
+reg signed [DATA_WIDTH-1:0] max2;
+
 always @(posedge clk) begin
     if(rst)
         max_out <= 0;
