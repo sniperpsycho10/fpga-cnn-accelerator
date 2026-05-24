@@ -1,58 +1,32 @@
 # FPGA CNN Accelerator
 
-A streaming FPGA-oriented CNN accelerator written in Verilog/SystemVerilog.
+A scalable FPGA-oriented CNN accelerator written in Verilog/SystemVerilog.
 
-This project implements the foundational architecture of a Convolutional Neural Network (CNN) accelerator using a fully modular RTL design approach. The design is simulation-driven and verified using Icarus Verilog and GTKWave on Linux.
+This project implements a modular and scalable CNN accelerator architecture using RTL design principles. The architecture evolves from basic CNN hardware blocks into a controlled streaming accelerator pipeline with scalable parameterized infrastructure.
 
----
-
-# Project Goals
-
-The goal of this project is to learn and implement:
-
-- FPGA accelerator architecture
-- Streaming CNN pipelines
-- RTL design methodology
-- Convolution hardware
-- Activation functions
-- Pooling hardware
-- Pipelined dataflow systems
-- CNN hardware fundamentals
-- Verification workflows
+The project is simulation-driven and verified using Icarus Verilog and GTKWave on Linux.
 
 ---
 
 # Current Status
 
-## Phase 1 Complete
-
-Implemented:
-
-- Signed INT8 MAC Unit
-- FIFO Buffer
-- Register File
-- Line Buffer
-- Sliding Window Generator
-- Convolution Engine
-- ReLU Activation Unit
-- Max Pooling Unit
-- Full CNN Pipeline Integration
+# Phase 1 Complete
+# Phase 2 Complete
 
 ---
 
-# Implemented Pipeline
+# Project Goals
 
-```text
-Input Pixels
-↓
-Sliding Window Generator
-↓
-Convolution Engine
-↓
-ReLU Activation
-↓
-Output Feature Stream
-```
+This project focuses on learning and implementing:
+
+- FPGA accelerator architecture
+- CNN hardware pipelines
+- Streaming dataflow systems
+- Handshake-controlled pipelines
+- Scalable RTL infrastructure
+- FPGA-oriented design methodology
+- CNN accelerator fundamentals
+- Hardware verification workflows
 
 ---
 
@@ -74,37 +48,60 @@ Output Feature Stream
 
 ---
 
+# Implemented Architecture
+
+```text
+Input Pixels
+↓
+Sliding Window Generator
+↓
+Convolution Engine
+↓
+Handshake Pipeline
+↓
+ReLU Activation
+↓
+Streaming Feature Outputs
+```
+
+---
+
 # Project Structure
 
 ```text
 cnn_accelerator/
 │
-├── docs/
 ├── rtl/
-│   ├── mac_unit.v
-│   ├── fifo.v
-│   ├── register_file.v
-│   ├── line_buffer.v
-│   ├── sliding_window.v
-│   ├── convolution_engine.v
-│   ├── relu.v
-│   ├── max_pool.v
-│   └── cnn_pipeline.v
+│   ├── scalable_mac_unit.v
+│   ├── scalable_fifo.v
+│   ├── scalable_register_file.v
+│   ├── scalable_line_buffer.v
+│   ├── scalable_sliding_window.v
+│   ├── scalable_convolution_engine.v
+│   ├── scalable_relu.v
+│   ├── scalable_max_pool.v
+│   ├── scalable_handshake_stage.v
+│   ├── scalable_feature_map_buffer.v
+│   ├── scalable_cnn_pipeline.v
+│   └── streaming_max_pool.v
 │
 ├── tb/
-│   ├── mac_tb.v
-│   ├── fifo_tb.v
-│   ├── register_file_tb.v
-│   ├── line_buffer_tb.v
-│   ├── sliding_window_tb.v
-│   ├── convolution_engine_tb.v
-│   ├── relu_tb.v
-│   ├── max_pool_tb.v
-│   └── cnn_pipeline_tb.v
+│   ├── scalable_mac_unit_tb.v
+│   ├── scalable_fifo_tb.v
+│   ├── scalable_register_file_tb.v
+│   ├── scalable_line_buffer_tb.v
+│   ├── scalable_sliding_window_tb.v
+│   ├── scalable_convolution_engine_tb.v
+│   ├── scalable_relu_tb.v
+│   ├── scalable_max_pool_tb.v
+│   ├── scalable_handshake_stage_tb.v
+│   ├── scalable_feature_map_buffer_tb.v
+│   ├── scalable_cnn_pipeline_tb.v
+│   ├── cnn_pipeline_handshake_tb.v
+│   └── streaming_max_pool_tb.v
 │
-├── sim/
-├── waveforms/
 ├── scripts/
+├── waveforms/
 │
 ├── Makefile
 ├── README.md
@@ -113,11 +110,57 @@ cnn_accelerator/
 
 ---
 
-# Phase 1 Modules
+# Phase 1 Overview
 
-## 1. MAC Unit
+Phase 1 focused on building the fundamental CNN accelerator pipeline.
 
-Implements signed INT8 multiply-accumulate operation.
+Implemented:
+- Signed INT8 MAC Unit
+- FIFO Buffer
+- Register File
+- Line Buffer
+- Sliding Window Generator
+- Convolution Engine
+- ReLU Activation
+- Max Pooling
+- Full CNN Pipeline Integration
+
+Core concepts learned:
+- streaming CNN pipelines
+- convolution hardware
+- CNN dataflow
+- RTL verification
+- pipelined processing
+
+---
+
+# Phase 2 Overview
+
+Phase 2 focused on transforming the architecture into a scalable and controlled streaming accelerator.
+
+Implemented:
+- Valid/Ready Handshake Protocol
+- Controlled Streaming Pipeline
+- Feature Map Buffering
+- Streaming Max Pool Integration
+- Parameterized RTL Architecture
+- Scalable CNN Pipeline
+
+Core concepts learned:
+- handshake-based synchronization
+- backpressure
+- pipeline stalling
+- scalable RTL design
+- reusable hardware architecture
+- controlled streaming systems
+
+---
+
+# Implemented Modules
+
+## 1. Scalable MAC Unit
+
+Implements signed multiply-accumulate arithmetic.
 
 Operation:
 
@@ -126,67 +169,62 @@ acc_out = acc_in + (a × b)
 ```
 
 Purpose:
-- Fundamental computation block for CNNs
-- Core arithmetic unit for convolution
+- convolution arithmetic
+- CNN computation core
 
 ---
 
-## 2. FIFO Buffer
+## 2. Scalable FIFO
 
 Implements:
-- write/read buffering
-- flow control
+- streaming buffers
 - queue-based storage
+- flow synchronization
 
 Features:
-- full flag
-- empty flag
-- sequential data handling
-
-Purpose:
-- streaming synchronization
-- pipeline buffering
+- full/empty flags
+- scalable depth
+- parameterized width
 
 ---
 
-## 3. Register File
+## 3. Scalable Register File
 
 Implements:
-- small local memory
-- indexed read/write access
+- configurable local storage
+- indexed read/write memory
 
 Purpose:
-- temporary storage
-- activation/weight storage
+- temporary feature storage
+- weight storage
 
 ---
 
-## 4. Line Buffer
+## 4. Scalable Line Buffer
 
 Implements:
-- previous row storage
-- streaming image buffering
+- image row buffering
+- delayed pixel streaming
 
 Purpose:
 - support sliding window generation
-- enable convolution on streamed pixels
 
 ---
 
-## 5. Sliding Window Generator
+## 5. Scalable Sliding Window Generator
 
 Generates:
-- moving 3×3 convolution windows
+- streaming 3×3 convolution windows
 
 Purpose:
 - convert serial pixel stream into spatial CNN windows
 
 ---
 
-## 6. Convolution Engine
+## 6. Scalable Convolution Engine
 
 Implements:
-- 3×3 convolution operation
+- 3×3 convolution
 - kernel multiplication
 - accumulation
 
@@ -199,57 +237,78 @@ Kernel:
 ```
 
 Purpose:
-- CNN feature extraction
+- feature extraction
 
 ---
 
-## 7. ReLU Activation Unit
+## 7. Scalable ReLU
 
 Implements:
-- Rectified Linear Unit activation
-
-Operation:
 
 ```text
 f(x) = max(0, x)
 ```
 
 Purpose:
-- introduce nonlinearity
-- remove negative activations
+- CNN activation
+- nonlinearity
 
 ---
 
-## 8. Max Pooling Unit
+## 8. Scalable Max Pool
 
 Implements:
 - 2×2 max pooling
 
 Purpose:
-- feature map reduction
+- feature reduction
 - bandwidth reduction
-- feature compression
 
 ---
 
-## 9. Full CNN Pipeline
+## 9. Scalable Handshake Stage
 
-Integrated streaming architecture:
+Implements:
+- valid/ready protocol
+- controlled streaming
+- pipeline synchronization
+
+Purpose:
+- safe inter-stage communication
+
+---
+
+## 10. Scalable Feature Map Buffer
+
+Implements:
+- feature storage memory
+- buffered CNN outputs
+
+Purpose:
+- pooling preparation
+- future CNN layer support
+
+---
+
+## 11. Scalable CNN Pipeline
+
+Integrated architecture:
 
 ```text
 Sliding Window
 → Convolution
+→ Handshake Stage
 → ReLU
 ```
 
 Purpose:
-- continuous CNN hardware processing pipeline
+- scalable streaming CNN accelerator
 
 ---
 
 # Simulation Workflow
 
-## Compile + Run
+## Compile + Simulate
 
 ```bash
 make
@@ -265,17 +324,17 @@ make wave
 
 # Verification
 
-All modules are individually verified using:
+All modules are verified using:
 - dedicated Verilog testbenches
 - GTKWave waveform analysis
 
 Verification includes:
 - signed arithmetic correctness
-- FIFO behavior
+- streaming correctness
+- handshake correctness
 - convolution correctness
-- activation correctness
 - pooling correctness
-- streaming pipeline validation
+- pipeline synchronization
 
 ---
 
@@ -283,58 +342,60 @@ Verification includes:
 
 This project focuses on:
 
-- streaming dataflow architecture
-- modular RTL design
-- pipelined hardware systems
-- FPGA-oriented accelerator design
-- scalable CNN infrastructure
+- streaming accelerator design
+- scalable RTL architecture
+- FPGA-oriented implementation
+- reusable hardware infrastructure
+- modular CNN hardware systems
 
-The accelerator is intentionally designed incrementally to build strong architecture understanding before advanced optimization stages.
+The architecture is intentionally developed incrementally to build deep understanding of accelerator engineering fundamentals.
 
 ---
 
 # Future Roadmap
 
-## Phase 2
-- Proper streaming max pooling integration
-- Feature map buffering
-- Pipeline control logic
-- Valid/ready handshaking
+# Phase 3
+FPGA implementation and optimization:
+- synthesis
+- timing analysis
+- DSP inference
+- BRAM inference
+- FPGA resource optimization
+- pipeline optimization
 
-## Phase 3
-- Processing Element (PE) arrays
-- Systolic array architecture
-- Parallel convolution
+# Phase 4
+Advanced accelerator architecture:
+- systolic arrays
+- PE arrays
+- parallel convolution
+- multi-channel CNN support
 
-## Phase 4
-- Memory optimization
-- Double buffering
-- Bandwidth optimization
+# Phase 5
+Software integration:
+- Python verification
+- automated test generation
+- image preprocessing
 
-## Phase 5
-- Python verification infrastructure
-- Tensor/image preprocessing
-- Automated test generation
-
-## Phase 6
-- FPGA deployment
-- Resource utilization analysis
-- Performance benchmarking
+# Phase 6
+Real FPGA deployment:
+- board implementation
+- benchmarking
+- real-time demonstrations
 
 ---
 
 # Learning Objectives
 
-This project is intended to develop understanding of:
+This project develops understanding of:
 
 - FPGA architecture
 - CNN accelerator hardware
-- Streaming pipelines
-- Hardware dataflow
-- Parallel computation
-- RTL verification
-- Pipelined digital systems
-- AI hardware fundamentals
+- streaming dataflow systems
+- scalable RTL design
+- accelerator synchronization
+- hardware pipelines
+- AI accelerator fundamentals
+- digital hardware verification
 
 ---
 
@@ -343,7 +404,7 @@ This project is intended to develop understanding of:
 ## 1. Clone Repository
 
 ```bash
-git clone <your-repo-link>
+git clone <your-repository-link>
 ```
 
 ## 2. Enter Project
@@ -372,8 +433,8 @@ Install:
 
 - Icarus Verilog
 - GTKWave
-- VS Code
 - Git
+- VS Code
 
 Ubuntu/Kubuntu:
 
@@ -383,26 +444,11 @@ sudo apt install iverilog gtkwave git
 
 ---
 
-# Development Environment
-
-Recommended VS Code Extensions:
+# Recommended VS Code Extensions
 
 - Verilog HDL/SystemVerilog
 - Error Lens
 - GitLens
-
----
-
-# Key Concepts Implemented
-
-- Signed INT8 arithmetic
-- Streaming CNN dataflow
-- Sliding window generation
-- Convolution computation
-- Activation pipelines
-- Max pooling
-- Pipelined RTL systems
-- FPGA-oriented architecture
 
 ---
 
